@@ -157,7 +157,40 @@ class Details extends Component {
     this.setState({ totalItems: totalItems });
     this.setState({ totalAmount: totalAmount });
   };
-  removeFromCartHandler = (e, id, type, name, price) => {};
+  /**
+   * This function is called when an item is removed from the cart.
+   * @param e - event
+   * @param id - item id
+   * @param type - type (VEG or NON_VEG)
+   * @param name - item name
+   * @param price - price
+   */
+  removeFromCartHandler = (e, id, type, name, price) => {
+    var index = this.getIndex(name, this.state.orderItems.items, "name");
+
+    if (this.state.orderItems.items[index].quantity > 1) {
+      var quantity = this.state.orderItems.items[index].quantity - 1;
+      var priceForAll =
+        this.state.orderItems.items[index].priceForAll -
+        this.state.orderItems.items[index].pricePerItem;
+      var item = this.state.orderItems.items[index];
+      item.quantity = quantity;
+      item.priceForAll = priceForAll;
+      this.setState(item);
+      this.setState({ itemQuantityDecreased: true });
+    } else {
+      this.state.orderItems.items.splice(index, 1);
+      this.setState({ itemRemovedFromCart: true });
+    }
+
+    var totalAmount = this.state.totalAmount;
+    totalAmount -= price;
+    var totalItems = this.state.totalItems;
+    totalItems -= 1;
+
+    this.setState({ totalItems: totalItems });
+    this.setState({ totalAmount: totalAmount });
+  };
   addAnItemFromCartHandler = (item, index) => {};
   checkoutHandler = () => {};
 
