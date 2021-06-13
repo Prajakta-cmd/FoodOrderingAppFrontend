@@ -106,6 +106,60 @@ class Details extends Component {
     );
     return pascalCasedString;
   }
+  /**
+   * This function is called when you add an item to the cart.
+   * @param e - event
+   * @param id - item id
+   * @param type - type (VEG or NON_VEG)
+   * @param name - item name
+   * @param price - price
+   */
+  addToCartHandler = (e, id, type, name, price) => {
+    var totalAmount = this.state.totalAmount;
+    var totalItems = this.state.totalItems;
+    totalItems += 1;
+
+    const newItem = this.state.cartItem;
+    newItem.id = id;
+    newItem.type = type;
+    newItem.name = name;
+    newItem.pricePerItem = price;
+    newItem.quantity = 1;
+    newItem.priceForAll = price;
+
+    this.setState({ cartItem: newItem });
+
+    totalAmount += price;
+
+    if (
+      this.state.orderItems.items !== undefined &&
+      this.state.orderItems.items.some((item) => item.name === name)
+    ) {
+      var index = this.getIndex(name, this.state.orderItems.items, "name");
+      var quantity = this.state.orderItems.items[index].quantity + 1;
+      var priceForAll =
+        this.state.orderItems.items[index].priceForAll +
+        this.state.orderItems.items[index].pricePerItem;
+      var item = this.state.orderItems.items[index];
+      item.quantity = quantity;
+      item.priceForAll = priceForAll;
+      this.setState(item);
+    } else {
+      this.state.cartItems.push(this.state.cartItem);
+      this.setState({ cartItem: {} });
+
+      const orderItems = this.state.orderItems;
+      orderItems.items = this.state.cartItems;
+      this.setState({ orderItems: orderItems });
+    }
+
+    this.setState({ open: true });
+    this.setState({ totalItems: totalItems });
+    this.setState({ totalAmount: totalAmount });
+  };
+  removeFromCartHandler = (e, id, type, name, price) => {};
+  addAnItemFromCartHandler = (item, index) => {};
+  checkoutHandler = () => {};
 
   render() {
     return (
@@ -250,7 +304,18 @@ class Details extends Component {
                       </Grid>
                       <Grid item xs={1} lg={1} />
                       <Grid item xs={2} lg={2}>
-                        <IconButton style={{ padding: 0, float: "left" }}>
+                        <IconButton
+                          style={{ padding: 0, float: "left" }}
+                          onClick={(e) =>
+                            this.addToCartHandler(
+                              e,
+                              item.id,
+                              item.item_type,
+                              item.item_name,
+                              item.price
+                            )
+                          }
+                        >
                           <AddIcon style={{ padding: 0 }} fontSize="small" />
                         </IconButton>
                       </Grid>
@@ -318,6 +383,15 @@ class Details extends Component {
                                   <IconButton
                                     className="add-remove-button-hover"
                                     style={{ display: "flex", padding: 0 }}
+                                    onClick={(e) =>
+                                      this.removeFromCartHandler(
+                                        e,
+                                        item.id,
+                                        item.type,
+                                        item.name,
+                                        item.pricePerItem
+                                      )
+                                    }
                                   >
                                     <RemoveIcon
                                       fontSize="default"
@@ -333,6 +407,11 @@ class Details extends Component {
                                   <IconButton
                                     className="add-remove-button-hover"
                                     style={{ display: "flex", padding: 0 }}
+                                    onClick={this.addAnItemFromCartHandler.bind(
+                                      this,
+                                      item,
+                                      index
+                                    )}
                                   >
                                     <AddIcon
                                       fontSize="default"
@@ -379,6 +458,7 @@ class Details extends Component {
                           className="checkout"
                           variant="contained"
                           color="primary"
+                          onClick={this.checkoutHandler}
                         >
                           <Typography>CHECKOUT</Typography>
                         </Button>
