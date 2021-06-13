@@ -4,7 +4,15 @@ import React, { Component, Fragment } from "react";
 import "./Details.css";
 
 //Other components import
+import CustomizedSnackbar from "../../common/customizedsnackbar/CustomizedSnackBar";
 import Header from "../../common/header/Header";
+
+//Material UI component imports
+import IconButton from "@material-ui/core/IconButton";
+import Divider from "@material-ui/core/Divider";
+import AddIcon from "@material-ui/icons/Add";
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
 
 class Details extends Component {
   constructor() {
@@ -178,6 +186,72 @@ class Details extends Component {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+          <div className="category-items-cart-container">
+            <div className="category-items-container">
+              {this.state.categories.map((category) => (
+                <div className="category" key={"category" + category.id}>
+                  <span
+                    style={{
+                      color: "grey",
+                      fontWeight: "bolder",
+                    }}
+                  >
+                    {category.category_name.toUpperCase()}
+                  </span>{" "}
+                  <Divider
+                    style={{
+                      marginTop: "10px",
+                      marginBottom: "10px",
+                      width: "90%",
+                    }}
+                  />
+                  {category.item_list.map((item) => (
+                    <Grid container key={item.id} style={{ marginBottom: 5 }}>
+                      <Grid item xs={1} lg={1}>
+                        {item.item_type === "VEG" ? (
+                          <span
+                            className="fa fa-circle"
+                            aria-hidden="true"
+                            style={{ fontSize: "12px", color: "green" }}
+                          />
+                        ) : (
+                          <span
+                            className="fa fa-circle"
+                            aria-hidden="true"
+                            style={{ fontSize: "12px", color: "red" }}
+                          />
+                        )}
+                      </Grid>
+                      <Grid item xs={5} lg={6}>
+                        <Typography>
+                          <span className="item-name">
+                            {" "}
+                            {this.Capitalize(item.item_name)}{" "}
+                          </span>
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={3} lg={2}>
+                        <div className="pricePerItem">
+                          <span>
+                            <i className="fa fa-inr" aria-hidden="true" />
+                            <span style={{ paddingLeft: "2px" }}>
+                              {item.price.toFixed(2)}
+                            </span>
+                          </span>
+                        </div>
+                      </Grid>
+                      <Grid item xs={1} lg={1} />
+                      <Grid item xs={2} lg={2}>
+                        <IconButton style={{ padding: 0, float: "left" }}>
+                          <AddIcon style={{ padding: 0 }} fontSize="small" />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  ))}
+                </div>
+              ))}
             </div>
           </div>
         </div>
