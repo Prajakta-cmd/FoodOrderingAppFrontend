@@ -102,7 +102,7 @@ const customStyles = {
 };
 
 // Tab container inside the modal
-const TabContainer = function(props) {
+const TabContainer = function (props) {
   return (
     <Typography component="div" style={{ padding: 0, textAlign: "center" }}>
       {props.children}
@@ -185,6 +185,7 @@ class Header extends Component {
                       root: classes.inputRoot,
                       input: classes.inputInput,
                     }}
+                    onChange={this.props.searchHandler}
                   />
                 </ThemeProvider>
               </div>
@@ -584,7 +585,7 @@ class Header extends Component {
     let loginData = null;
     let that = this;
     let xhrLogin = new XMLHttpRequest();
-    xhrLogin.addEventListener("readystatechange", function() {
+    xhrLogin.addEventListener("readystatechange", function () {
       if (this.readyState === 4) {
         let loginResponse = JSON.parse(this.responseText);
         // displays the login error message
@@ -775,7 +776,7 @@ class Header extends Component {
 
     let that = this;
     let xhrSignup = new XMLHttpRequest();
-    xhrSignup.addEventListener("readystatechange", function() {
+    xhrSignup.addEventListener("readystatechange", function () {
       if (this.readyState === 4) {
         let responseText = JSON.parse(this.responseText);
         // displays the signup error message
