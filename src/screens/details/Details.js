@@ -13,6 +13,12 @@ import Divider from "@material-ui/core/Divider";
 import AddIcon from "@material-ui/icons/Add";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+import Card from "@material-ui/core/Card";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import CardContent from "@material-ui/core/CardContent";
+import Button from "@material-ui/core/Button";
+import Badge from "@material-ui/core/Badge";
+import RemoveIcon from "@material-ui/icons/Remove";
 
 class Details extends Component {
   constructor() {
@@ -252,6 +258,135 @@ class Details extends Component {
                   ))}
                 </div>
               ))}
+            </div>
+            <div className="cart-container">
+              <Card>
+                <CardContent>
+                  <div style={{ fontWeight: "bold" }}>
+                    <i style={{ paddingRight: "20px" }}>
+                      <Badge
+                        className="badge"
+                        badgeContent={this.state.totalItems}
+                        color="primary"
+                        showZero
+                      >
+                        <ShoppingCartIcon />
+                      </Badge>
+                    </i>
+                    My Cart
+                  </div>
+                  <div className="cart-item-list">
+                    <Grid container>
+                      {this.state.orderItems.items !== undefined
+                        ? this.state.orderItems.items.map((item, index) => (
+                            <Fragment key={item.id}>
+                              <Grid item xs={2} lg={2}>
+                                {item.type === "VEG" ? (
+                                  <span
+                                    className="fa fa-stop-circle-o"
+                                    aria-hidden="true"
+                                    style={{
+                                      fontSize: "12px",
+                                      color: "green",
+                                      paddingRight: "12px",
+                                    }}
+                                  />
+                                ) : (
+                                  <span
+                                    className="fa fa-stop-circle-o"
+                                    aria-hidden="true"
+                                    style={{
+                                      fontSize: "12px",
+                                      color: "red",
+                                      paddingRight: "12px",
+                                    }}
+                                  />
+                                )}
+                              </Grid>
+                              <Grid item xs={3} lg={4}>
+                                <Typography>
+                                  {this.Capitalize(item.name)}
+                                </Typography>
+                              </Grid>
+                              <Grid
+                                item
+                                xs={3}
+                                lg={3}
+                                style={{ flexWrap: "wrap" }}
+                              >
+                                <div className="add-remove-icon">
+                                  <IconButton
+                                    className="add-remove-button-hover"
+                                    style={{ display: "flex", padding: 0 }}
+                                  >
+                                    <RemoveIcon
+                                      fontSize="default"
+                                      style={{
+                                        color: "black",
+                                        fontWeight: "bolder",
+                                      }}
+                                    />
+                                  </IconButton>
+                                  <Typography style={{ fontWeight: "bold" }}>
+                                    {item.quantity}
+                                  </Typography>
+                                  <IconButton
+                                    className="add-remove-button-hover"
+                                    style={{ display: "flex", padding: 0 }}
+                                  >
+                                    <AddIcon
+                                      fontSize="default"
+                                      style={{
+                                        color: "black",
+                                        fontWeight: "bolder",
+                                      }}
+                                    />
+                                  </IconButton>
+                                </div>
+                              </Grid>
+                              <Grid item xs={4} lg={3}>
+                                <span style={{ float: "right" }}>
+                                  <i className="fa fa-inr" aria-hidden="true" />
+                                  <span style={{ paddingLeft: "2px" }}>
+                                    {item.priceForAll.toFixed(2)}
+                                  </span>
+                                </span>
+                              </Grid>
+                            </Fragment>
+                          ))
+                        : null}
+                      <Grid item xs={8} lg={9}>
+                        <div style={{ marginTop: 15, marginBottom: 15 }}>
+                          <span style={{ fontWeight: "bold" }}>
+                            TOTAL AMOUNT
+                          </span>
+                        </div>
+                      </Grid>
+                      <Grid item xs={4} lg={3}>
+                        <div style={{ marginTop: 15, marginBottom: 15 }}>
+                          <span style={{ fontWeight: "bold", float: "right" }}>
+                            <i
+                              className="fa fa-inr"
+                              aria-hidden="true"
+                              style={{ paddingRight: "2px" }}
+                            />
+                            {this.state.totalAmount.toFixed(2)}
+                          </span>
+                        </div>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Button
+                          className="checkout"
+                          variant="contained"
+                          color="primary"
+                        >
+                          <Typography>CHECKOUT</Typography>
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
