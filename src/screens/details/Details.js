@@ -191,7 +191,31 @@ class Details extends Component {
     this.setState({ totalItems: totalItems });
     this.setState({ totalAmount: totalAmount });
   };
-  addAnItemFromCartHandler = (item, index) => {};
+  /**Added function to handle adding quantities in cart items */
+  addAnItemFromCartHandler = (item, index) => {
+    const itemIndex = this.getIndex(
+      item.name,
+      this.state.orderItems.items,
+      "name"
+    );
+
+    var quantity = this.state.orderItems.items[itemIndex].quantity + 1;
+    var priceForAll =
+      this.state.orderItems.items[itemIndex].priceForAll +
+      this.state.orderItems.items[itemIndex].pricePerItem;
+    var itemAdded = this.state.orderItems.items[itemIndex];
+    itemAdded.quantity = quantity;
+    itemAdded.priceForAll = priceForAll;
+    this.setState(item);
+    this.setState({ itemQuantityIncreased: true });
+    var totalAmount = this.state.totalAmount;
+    totalAmount += item.pricePerItem;
+    var totalItems = this.state.totalItems;
+    totalItems += 1;
+
+    this.setState({ totalItems: totalItems });
+    this.setState({ totalAmount: totalAmount });
+  };
   checkoutHandler = () => {};
 
   render() {
