@@ -183,7 +183,31 @@ class Home extends Component {
   };
 
   // integrating search box with ui
-  searchHandler = (event) => {};
+  searchHandler = (event) => {
+    let that = this;
+    let filteredRestaurants = [];
+    let xhrFilteredRestaurants = new XMLHttpRequest();
+    xhrFilteredRestaurants.addEventListener("readystatechange", function () {
+      if (this.readyState === 4) {
+        if (!JSON.parse(this.responseText).restaurants) {
+          that.setState({
+            restaurants: [],
+          });
+        } else {
+          that.setState({
+            restaurants: JSON.parse(this.responseText).restaurants,
+          });
+        }
+      }
+    });
+    if (event.target.value === "") {
+      this.getRestaurants();
+    } else {
+      let url = this.props.baseUrl + "restaurant/name/" + event.target.value;
+      xhrFilteredRestaurants.open("GET", url);
+      xhrFilteredRestaurants.send(filteredRestaurants);
+    }
+  };
 
   // redirects to restaurant details page with restauranat id
   restaurantDetails = (restaurantId) => {
