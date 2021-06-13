@@ -389,6 +389,36 @@ class Details extends Component {
               </Card>
             </div>
           </div>
+          <CustomizedSnackbar
+            open={this.state.open}
+            closeHandler={this.closeHandler}
+            message="Item added to cart!"
+          />
+          <CustomizedSnackbar
+            open={this.state.cartEmpty}
+            closeHandler={this.closeHandler}
+            message="Please add an item to your cart!"
+          />
+          <CustomizedSnackbar
+            open={this.state.itemQuantityDecreased}
+            closeHandler={this.closeHandler}
+            message="Item quantity decreased by 1!"
+          />
+          <CustomizedSnackbar
+            open={this.state.nonloggedIn}
+            closeHandler={this.closeHandler}
+            message="Please login first!"
+          />
+          <CustomizedSnackbar
+            open={this.state.itemRemovedFromCart}
+            closeHandler={this.closeHandler}
+            message="Item removed from cart!"
+          />
+          <CustomizedSnackbar
+            open={this.state.itemQuantityIncreased}
+            closeHandler={this.closeHandler}
+            message="Item quantity increased by 1!"
+          />
         </div>
       </div>
     );
