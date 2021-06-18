@@ -587,6 +587,89 @@ class Checkout extends Component {
 
     xhr.send();
   };
+  /**
+   * This function connects to the API server to save the address.
+   */
+  saveAddress = () => {
+    let tempCityRequired = false;
+    let tempPincodeRequired = false;
+    let tempFlatRequired = false;
+    let tempStateRequired = false;
+    let tempLocalityRequired = false;
+    if (this.state.city === "" || this.state.cityRequired) {
+      tempCityRequired = true;
+    }
+
+    if (this.state.locality === "" || this.state.localityRequired) {
+      tempLocalityRequired = true;
+    }
+
+    if (this.state.flat === "" || this.state.flatRequired) {
+      tempFlatRequired = true;
+    }
+
+    if (this.state.stateUUID === "" || this.state.stateUUIDRequired) {
+      tempStateRequired = true;
+    }
+
+    if (this.state.pincode === "" || this.state.pincodeRequired) {
+      tempPincodeRequired = true;
+    }
+
+    if (
+      tempFlatRequired ||
+      tempPincodeRequired ||
+      tempStateRequired ||
+      tempLocalityRequired ||
+      tempCityRequired
+    ) {
+      this.setState({
+        flatRequired: tempFlatRequired,
+        localityRequired: tempLocalityRequired,
+        cityRequired: tempCityRequired,
+        stateUUIDRequired: tempStateRequired,
+        pincodeRequired: tempPincodeRequired,
+      });
+      return;
+    }
+
+    let address = {
+      city: this.state.city,
+      flat_building_name: this.state.flat,
+      locality: this.state.locality,
+      pincode: this.state.pincode,
+      state_uuid: this.state.stateUUID,
+    };
+
+    let token = sessionStorage.getItem("access-token");
+
+    let xhr = new XMLHttpRequest();
+
+    let that = this;
+
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState === 4) {
+        that.setState({
+          addresses: JSON.parse(this.responseText).addresses,
+          city: "",
+          locality: "",
+          flat: "",
+          stateUUID: "",
+          pincode: "",
+        });
+      }
+    });
+
+    let url = this.props.baseUrl + "address/";
+
+    xhr.open("POST", url);
+
+    xhr.setRequestHeader("authorization", "Bearer " + token);
+    xhr.setRequestHeader("Cache-Control", "no-cache");
+    xhr.setRequestHeader("content-type", "application/json");
+
+    xhr.send(JSON.stringify(address));
+  };
 }
 
 export default Checkout;
