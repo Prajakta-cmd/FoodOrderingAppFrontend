@@ -317,7 +317,55 @@ class Checkout extends Component {
                   </div>
                 </StepContent>
               </Step>
+              <Step key="Payment">
+                <StepLabel>Payment</StepLabel>
+                <StepContent>
+                  <div id="payment-modes">
+                    <FormControl>
+                      <FormLabel>Select Mode of Payment</FormLabel>
+                      <RadioGroup
+                        onChange={this.onPaymentSelection}
+                        value={this.state.paymentId}
+                      >
+                        {(this.state.payments || []).map((payment, index) => (
+                          <FormControlLabel
+                            key={payment.id}
+                            value={payment.id}
+                            control={<Radio />}
+                            label={payment.payment_name}
+                          />
+                        ))}
+                      </RadioGroup>
+                    </FormControl>
+                  </div>
+                  <Button
+                    style={{ margin: 5 }}
+                    onClick={this.decrementActiveStep}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    style={{ margin: 5 }}
+                    variant="contained"
+                    color="primary"
+                    onClick={this.incrementActiveStep}
+                  >
+                    Finish
+                  </Button>
+                </StepContent>
+              </Step>
             </Stepper>
+            <div className={this.state.displayChange}>
+              <Typography style={{ marginLeft: 40 }} variant="h5">
+                View the summary and place your order now!
+              </Typography>
+              <Button
+                style={{ marginLeft: 40, marginTop: 20 }}
+                onClick={this.resetActiveStep}
+              >
+                CHANGE
+              </Button>
+            </div>
           </div>
         </div>
         <div>
