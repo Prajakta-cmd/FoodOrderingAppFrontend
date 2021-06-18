@@ -367,6 +367,30 @@ class Checkout extends Component {
               </Button>
             </div>
           </div>
+          <div className="summary-section">
+            <Card variant="elevation" className="summary-card">
+              <CardContent>
+                <Typography variant="h5" component="h2">
+                  Summary
+                </Typography>
+                <br />
+                <Typography
+                  variant="h6"
+                  component="h3"
+                  color="textSecondary"
+                  style={{ textTransform: "capitalize", marginBottom: 15 }}
+                >
+                  {this.props.location.state.restaurantName}
+                </Typography>
+                <OrderItems
+                  divider="true"
+                  orderitems={this.props.location.state.orderItems}
+                  total={this.props.location.state.total}
+                  placeOrder={this.placeOrder}
+                />
+              </CardContent>
+            </Card>
+          </div>
         </div>
         <div>
           <Snackbar
