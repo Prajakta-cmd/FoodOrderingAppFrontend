@@ -416,10 +416,7 @@ class Checkout extends Component {
       });
     }
   };
-  /**
-   * This function is common for all the input changes of the new address form.
-   */
-  onInputFieldChangeHandler = (e) => {};
+
   /**
    * This function is used for stepper to move backwards based on user actions.
    */
@@ -441,6 +438,82 @@ class Checkout extends Component {
     }
   };
 
+  /**
+   * This function is used when a user clicks on one address tile to select the address.
+   */
+  selectAddress = (e) => {
+    let elementId = e.target.id;
+    console.log(
+      "elementId",
+      elementId,
+      e.target.value,
+      this.state.selectedAddressId
+    );
+    if (elementId.startsWith("select-address-icon-")) {
+      this.setState({
+        selectedAddressId: elementId.split("select-address-icon-")[1],
+      });
+    }
+    if (elementId.startsWith("select-address-button-")) {
+      this.setState({
+        selectedAddressId: elementId.split("select-address-button-")[1],
+      });
+    }
+  };
+
+  /**
+   * This function is common for all the input changes of the new address form.
+   */
+  onInputFieldChangeHandler = (e) => {
+    let stateKey = e.target.id;
+    let stateValue = e.target.value;
+    //Material UI Select doesn't return key
+    if (stateKey === undefined) {
+      stateKey = "stateUUID";
+    }
+    //Form validation.
+    let stateValueRequiredKey = stateKey + "Required";
+    let stateKeyRequiredValue = false;
+    if (stateValue === "") {
+      stateKeyRequiredValue = true;
+    }
+    let validPincode = this.state.pincodeValid;
+    if (stateKey === "pincode") {
+      validPincode = this.validatePincode(stateValue);
+    }
+    this.setState({
+      [stateKey]: stateValue,
+      [stateValueRequiredKey]: stateKeyRequiredValue,
+      pincodeValid: validPincode,
+    });
+  };
+
+  /**
+   * This function is used to validate the pincode.
+   */
+  validatePincode = (pincode) => {
+    if (pincode !== undefined && pincode.length !== 6) {
+      return false;
+    } else if (!isNaN(pincode) && pincode.length === 6) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  /**
+   * This function is used in step 2 of the stepper when a user selects the payment mode.
+   */
+  onPaymentSelection = (e) => {
+    this.setState({ paymentId: e.target.value });
+  };
+
+  /**
+   * This function closes the snackbar that displays order success or failure message.
+   */
+  placeOrderMessageClose = () => {
+    this.setState({ placeOrderMessageOpen: false });
+  };
   /**
    * This function connects to the API server to fetch the addresses.
    */
