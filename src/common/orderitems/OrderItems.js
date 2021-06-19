@@ -8,7 +8,7 @@ import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
+//import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -89,9 +89,13 @@ export default function OrderItems(props) {
               value={couponName}
               onChange={handleChange}
             >
-              <MenuItem value="None">{"None"}</MenuItem>
+              <MenuItem value="None" key="None">
+                {"None"}
+              </MenuItem>
               {couponNamesList.map((item) => (
-                <MenuItem value={item}>{item}</MenuItem>
+                <MenuItem value={item} key={item}>
+                  {item}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -121,7 +125,7 @@ export default function OrderItems(props) {
                 ₹
               </i>
             </Typography>
-            <Typography style={{ marginRight: 10 }} color="textPrimary">
+            <Typography style={{ marginRight: 10 }} color="textSecondary">
               {Number(props.subtotal).toLocaleString(undefined, {
                 minimumFractionDigits: 2,
               })}
@@ -141,7 +145,7 @@ export default function OrderItems(props) {
                 ₹
               </i>
             </Typography>
-            <Typography style={{ marginRight: 10 }} color="textPrimary">
+            <Typography style={{ marginRight: 10 }} color="textSecondary">
               {Number(
                 (Number(props.discount) / 100) * Number(props.subtotal)
               ).toLocaleString(undefined, {
