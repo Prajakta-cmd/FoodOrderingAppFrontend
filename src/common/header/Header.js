@@ -34,6 +34,7 @@ import { Link } from "react-router-dom";
 import TocIcon from "@material-ui/icons/Toc";
 import Popover from "@material-ui/core/Popover";
 import Grid from "@material-ui/core/Grid";
+
 //importing the css file of the header
 import "./Header.css";
 
@@ -56,7 +57,7 @@ const styles = (theme) => ({
     "&:hover": {
       backgroundColor: "transparent !important",
     },
-    cursor: "default",
+    cursor: "pointer",
   },
   category: {
     marginLeft: theme.spacing(20),
@@ -213,18 +214,21 @@ class Header extends Component {
       <div>
         <AppBar position="static" className={classes.appBar}>
           {/* Toolbar that contains app logo, searchbox and login button */}
+
           <Toolbar className={classes.headerTools}>
             {/* app logo inside iconButton*/}
-            <IconButton
-              aria-describedby={id}
-              disableRipple={true}
-              className={classes.logo}
-              edge="start"
-              color="inherit"
-              aria-label="app logo"
-            >
-              <FastfoodIcon />
-            </IconButton>
+            <Link to="/">
+              <IconButton
+                aria-describedby={id}
+                disableRipple={true}
+                className={classes.logo}
+                edge="start"
+                color="inherit"
+                aria-label="app logo"
+              >
+                <FastfoodIcon />
+              </IconButton>
+            </Link>
             {this.props.showCategories ? (
               <div>
                 <IconButton
