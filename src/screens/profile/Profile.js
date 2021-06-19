@@ -13,7 +13,9 @@ class Profile extends Component {
         <Header showSearchBox={false} showCategories={false} />
         {/* displays only the text Profile Page */}
         <div className="page-title">
-          <h1 className="text">Profile Page</h1>
+          <h1 className="text">
+            Welcome {sessionStorage.getItem("first-name")} !!!
+          </h1>
         </div>
       </div>
     );
