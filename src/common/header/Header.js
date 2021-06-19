@@ -31,7 +31,9 @@ import CloseIcon from "@material-ui/icons/Close";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import { Link } from "react-router-dom";
-
+import TocIcon from "@material-ui/icons/Toc";
+import Popover from "@material-ui/core/Popover";
+import Grid from "@material-ui/core/Grid";
 //importing the css file of the header
 import "./Header.css";
 
@@ -55,6 +57,9 @@ const styles = (theme) => ({
       backgroundColor: "transparent !important",
     },
     cursor: "default",
+  },
+  category: {
+    marginLeft: theme.spacing(20),
   },
   searchBox: {
     [theme.breakpoints.only("xs")]: {
@@ -147,10 +152,62 @@ class Header extends Component {
       signupErrorMessageRequired: "dispNone",
       menuState: false,
       anchorEl: null,
+      categories: [],
+      anchorEl: null,
+      open: false,
+      categoryId: "",
     };
   }
+  setAnchorEl = (anchorEl) => {
+    this.setState({ anchorEl: anchorEl, open: Boolean(this.state.anchorEl) });
+  };
+
+  handleAnchorElClick = (event) => {
+    this.setAnchorEl(event.currentTarget);
+  };
+
+  handleAnchorElClose = () => {
+    this.setAnchorEl(null);
+  };
+
+  componentDidMount() {
+    this.fetchCategories();
+  }
+  fetchCategories = () => {
+    let token = sessionStorage.getItem("access-token");
+
+    let xhr = new XMLHttpRequest();
+
+    let that = this;
+
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState === 4) {
+        that.setState({
+          categories: JSON.parse(this.responseText),
+        });
+      }
+    });
+
+    let url = this.props.baseUrl + `category`;
+
+    xhr.open("GET", url);
+
+    xhr.setRequestHeader("authorization", "Bearer " + token);
+    xhr.setRequestHeader("Cache-Control", "no-cache");
+
+    xhr.send();
+  };
+
+  setCategoryItem = (categoryName) => {
+    let catId = this.state.categories.categories.filter(
+      (item) => item.category_name === categoryName
+    );
+    this.setState({ categoryId: catId[0].id });
+    this.props.setCategory(catId[0].id);
+  };
 
   render() {
+    let id = this.state.open ? "simple-popover" : undefined;
     const { classes } = this.props;
     return (
       <div>
@@ -159,6 +216,7 @@ class Header extends Component {
           <Toolbar className={classes.headerTools}>
             {/* app logo inside iconButton*/}
             <IconButton
+              aria-describedby={id}
               disableRipple={true}
               className={classes.logo}
               edge="start"
@@ -167,6 +225,77 @@ class Header extends Component {
             >
               <FastfoodIcon />
             </IconButton>
+            {this.props.showCategories ? (
+              <div>
+                <IconButton
+                  className={classes.category}
+                  onClick={this.handleAnchorElClick}
+                >
+                  <TocIcon style={{ color: "white" }} />
+                  <span style={{ color: "white", fontSize: 18 }}>
+                    {"  Categories"}
+                  </span>
+                </IconButton>
+                <Popover
+                  id={id}
+                  open={this.state.open}
+                  anchorEl={this.state.anchorEl}
+                  onClose={this.handleAnchorElClose}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "center",
+                  }}
+                >
+                  <Grid
+                    container
+                    spacing={1}
+                    alignContent="space-between"
+                    alignItems="center"
+                    direction="row"
+                    justify="space-between"
+                    wrap="nowrap"
+                    style={{ backgroundColor: "#D3D3D3", margin: 2 }}
+                  >
+                    <Grid container item xs={12} spacing={1}>
+                      {"categories" in this.state.categories
+                        ? this.state.categories.categories.map((item) => (
+                            <Grid item xs={4}>
+                              {/* <Button
+                                variant="contained"
+                                style={{ margin: "5" }}
+                                onClick={() =>
+                                  this.setCategoryItem(item.category_name)
+                                }
+                                key={item.id}
+                              >
+                                {item.category_name}
+                              </Button> */}
+                              <Typography
+                                color={
+                                  this.state.categoryId === item.id
+                                    ? "textSecondary"
+                                    : "textPrimary"
+                                }
+                                key={item.id}
+                                style={{ cursor: "pointer" }}
+                                onClick={() =>
+                                  this.setCategoryItem(item.category_name)
+                                }
+                              >
+                                <b>{item.category_name}</b>
+                              </Typography>
+                            </Grid>
+                          ))
+                        : null}
+                    </Grid>
+                  </Grid>
+                </Popover>
+              </div>
+            ) : null}
             <div className={classes.grow} />
             {/* searchbox will be displayed only if needed */}
             {this.props.showSearchBox ? (
