@@ -64,6 +64,7 @@ class Checkout extends Component {
       placeOrderMessage: "",
       placeOrderMessageOpen: false,
       couponId: "",
+      discount: 0,
     };
   }
 
@@ -385,8 +386,10 @@ class Checkout extends Component {
                 <OrderItems
                   divider="true"
                   orderitems={this.props.location.state.orderItems}
-                  total={this.props.location.state.total}
+                  subtotal={this.props.location.state.total}
                   placeOrder={this.placeOrder}
+                  setCouponId={this.setCouponId}
+                  discount={this.state.discount}
                 />
               </CardContent>
             </Card>
@@ -417,6 +420,38 @@ class Checkout extends Component {
     );
   }
 
+  setCouponId = (couponName) => {
+    if (couponName === "None") {
+      this.setState({
+        couponId: "2ddf6a5e-ecd0-11e8-8eb2-f2801f1b9fd1", //hard coded coupon
+        discount: 0,
+      });
+    } else {
+      let token = sessionStorage.getItem("access-token");
+
+      let xhr = new XMLHttpRequest();
+
+      let that = this;
+
+      xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+          that.setState({
+            couponId: JSON.parse(this.responseText).id,
+            discount: JSON.parse(this.responseText).percent,
+          });
+        }
+      });
+
+      let url = this.props.baseUrl + `order/coupon/${couponName}`;
+
+      xhr.open("GET", url);
+
+      xhr.setRequestHeader("authorization", "Bearer " + token);
+      xhr.setRequestHeader("Cache-Control", "no-cache");
+
+      xhr.send();
+    }
+  };
   /**
    * This function is used for stepper to move ahead based on user actions.
    */
@@ -467,12 +502,6 @@ class Checkout extends Component {
    */
   selectAddress = (e) => {
     let elementId = e.target.id;
-    console.log(
-      "elementId",
-      elementId,
-      e.target.value,
-      this.state.selectedAddressId
-    );
     if (elementId.startsWith("select-address-icon-")) {
       this.setState({
         selectedAddressId: elementId.split("select-address-icon-")[1],
@@ -705,14 +734,6 @@ class Checkout extends Component {
       this.state.paymentId === undefined ||
       this.state.displayChange === "display-none"
     ) {
-      console.log(
-        "selectedAddressId",
-        this.state.selectedAddressId,
-        "paymentId",
-        this.state.paymentId,
-        "displayChange",
-        this.state.displayChange
-      );
       this.setState({
         placeOrderMessage: "Unable to place your order! Please try again!",
         placeOrderMessageOpen: true,
@@ -730,14 +751,38 @@ class Checkout extends Component {
     );
     let order = {
       address_id: this.state.selectedAddressId,
-      coupon_id: "2ddf6a5e-ecd0-11e8-8eb2-f2801f1b9fd1", //this.state.couponId,//hard coded coupon
+      coupon_id: this.state.couponId,
       item_quantities: itemQuantities,
       payment_id: this.state.paymentId,
       restaurant_id: this.props.location.state.orderItems.id,
       bill: bill,
-      discount: 0,
+      discount: Number(
+        (Number(this.state.discount) / 100) * Number(bill)
+      ).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+      }),
     };
-
+    /*console.log(
+      "address_id: ",
+      this.state.selectedAddressId,
+      "coupon_id: ",
+      this.state.couponId,
+      "item_quantities: ",
+      itemQuantities,
+      "payment_id: ",
+      this.state.paymentId,
+      "restaurant_id: ",
+      this.props.location.state.orderItems.id,
+      "bill: ",
+      bill,
+      "discount",
+      Number((Number(this.state.discount) / 100) * Number(bill)).toLocaleString(
+        undefined,
+        {
+          minimumFractionDigits: 2,
+        }
+      )
+    );*/
     let token = sessionStorage.getItem("access-token");
 
     let xhr = new XMLHttpRequest();
