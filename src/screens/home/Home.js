@@ -57,14 +57,40 @@ class Home extends Component {
     window.removeEventListener("resize", this.noOfColumns);
   }
 
+  setCategory = (categoryId) => {
+    let token = sessionStorage.getItem("access-token");
+
+    let xhr = new XMLHttpRequest();
+
+    let that = this;
+
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState === 4) {
+        that.setState({
+          restaurants: JSON.parse(this.responseText).restaurants,
+        });
+      }
+    });
+
+    let url = this.props.baseUrl + `restaurant/category/${categoryId}`;
+
+    xhr.open("GET", url);
+
+    xhr.setRequestHeader("authorization", "Bearer " + token);
+    xhr.setRequestHeader("Cache-Control", "no-cache");
+
+    xhr.send();
+  };
   render() {
     const { classes } = this.props;
     return this.mounted === true ? (
       <div>
         <Header
+          showCategories={true}
           showSearchBox={true}
           searchHandler={this.searchHandler}
           baseUrl={this.props.baseUrl}
+          setCategory={this.setCategory}
         />
         {/* if no restaurants found with the entered name displays the No restaurant with the given name. */}
         {this.state.restaurants.length === 0 && this.state.loading === false ? (
