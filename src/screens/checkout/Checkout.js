@@ -63,8 +63,9 @@ class Checkout extends Component {
       displayChange: "display-none",
       placeOrderMessage: "",
       placeOrderMessageOpen: false,
-      couponId: "",
+      couponId: "", //"2ddf6a5e-ecd0-11e8-8eb2-f2801f1b9fd1", //hard coded coupon
       discount: 0,
+      placeOrderDisabled: true,
     };
   }
 
@@ -390,6 +391,7 @@ class Checkout extends Component {
                   placeOrder={this.placeOrder}
                   setCouponId={this.setCouponId}
                   discount={this.state.discount}
+                  placeOrderDisabled={this.state.placeOrderDisabled}
                 />
               </CardContent>
             </Card>
@@ -423,8 +425,9 @@ class Checkout extends Component {
   setCouponId = (couponName) => {
     if (couponName === "None") {
       this.setState({
-        couponId: "2ddf6a5e-ecd0-11e8-8eb2-f2801f1b9fd1", //hard coded coupon
+        couponId: "", //"2ddf6a5e-ecd0-11e8-8eb2-f2801f1b9fd1", //hard coded coupon
         discount: 0,
+        placeOrderDisabled: true,
       });
     } else {
       let token = sessionStorage.getItem("access-token");
@@ -438,6 +441,7 @@ class Checkout extends Component {
           that.setState({
             couponId: JSON.parse(this.responseText).id,
             discount: JSON.parse(this.responseText).percent,
+            placeOrderDisabled: false,
           });
         }
       });
