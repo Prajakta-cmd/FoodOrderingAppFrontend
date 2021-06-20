@@ -229,6 +229,29 @@ class Header extends Component {
                 <FastfoodIcon />
               </IconButton>
             </Link>
+            <div className={classes.grow} />
+            {/* searchbox will be displayed only if needed */}
+            {this.props.showSearchBox ? (
+              <div className={classes.searchBox}>
+                <ThemeProvider theme={theme}>
+                  <InputLabel htmlFor="search-box-input" />
+                  <Input
+                    id="search-box-input"
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <SearchIcon />
+                      </InputAdornment>
+                    }
+                    placeholder="Search by Restaurant Name"
+                    classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput,
+                    }}
+                    onChange={this.props.searchHandler}
+                  />
+                </ThemeProvider>
+              </div>
+            ) : null}
             {this.props.showCategories ? (
               <div>
                 <IconButton
@@ -298,29 +321,6 @@ class Header extends Component {
                     </Grid>
                   </Grid>
                 </Popover>
-              </div>
-            ) : null}
-            <div className={classes.grow} />
-            {/* searchbox will be displayed only if needed */}
-            {this.props.showSearchBox ? (
-              <div className={classes.searchBox}>
-                <ThemeProvider theme={theme}>
-                  <InputLabel htmlFor="search-box-input" />
-                  <Input
-                    id="search-box-input"
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <SearchIcon />
-                      </InputAdornment>
-                    }
-                    placeholder="Search by Restaurant Name"
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.inputInput,
-                    }}
-                    onChange={this.props.searchHandler}
-                  />
-                </ThemeProvider>
               </div>
             ) : null}
             <div className={classes.grow} />

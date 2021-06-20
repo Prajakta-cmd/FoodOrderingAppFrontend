@@ -13,6 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -58,9 +59,7 @@ export default function OrderItems(props) {
           </Grid>
           <Grid item xs={3}>
             <Typography color="textSecondary">
-              <i className="fa fa-inr" aria-hidden="true">
-                ₹
-              </i>
+              <i className="fa fa-inr" aria-hidden="true"></i>
               {item.priceForAll.toLocaleString(undefined, {
                 minimumFractionDigits: 2,
               })}
@@ -98,6 +97,9 @@ export default function OrderItems(props) {
                 </MenuItem>
               ))}
             </Select>
+            <FormHelperText>
+              <span style={{ color: "red" }}>*required</span>
+            </FormHelperText>
           </FormControl>
         </Grid>
         <Grid item xs={4}>
@@ -121,9 +123,7 @@ export default function OrderItems(props) {
         <Grid item xs={3}>
           <div className="payable-bill-amount">
             <Typography color="textSecondary">
-              <i className="fa fa-inr" aria-hidden="true">
-                ₹
-              </i>
+              <i className="fa fa-inr" aria-hidden="true"></i>
             </Typography>
             <Typography style={{ marginRight: 10 }} color="textSecondary">
               {Number(props.subtotal).toLocaleString(undefined, {
@@ -141,9 +141,7 @@ export default function OrderItems(props) {
         <Grid item xs={3}>
           <div className="payable-bill-amount">
             <Typography color="textSecondary">
-              <i className="fa fa-inr" aria-hidden="true">
-                ₹
-              </i>
+              <i className="fa fa-inr" aria-hidden="true"></i>
             </Typography>
             <Typography style={{ marginRight: 10 }} color="textSecondary">
               {Number(
@@ -165,9 +163,7 @@ export default function OrderItems(props) {
         <Grid item xs={3}>
           <div className="payable-bill-amount">
             <Typography color="textSecondary">
-              <i className="fa fa-inr" aria-hidden="true">
-                ₹
-              </i>
+              <i className="fa fa-inr" aria-hidden="true"></i>
             </Typography>
             <Typography style={{ marginRight: 10 }} color="textPrimary">
               {Number(
@@ -187,6 +183,7 @@ export default function OrderItems(props) {
               variant="contained"
               color="primary"
               onClick={props.placeOrder}
+              disabled={props.placeOrderDisabled}
             >
               PLACE ORDER
             </Button>
