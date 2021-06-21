@@ -98,7 +98,9 @@ export default function OrderItems(props) {
               ))}
             </Select>
             <FormHelperText>
-              <span style={{ color: "red" }}>*required</span>
+              <span style={{ color: "red" }}>
+                *required (Click Apply after selction)
+              </span>
             </FormHelperText>
           </FormControl>
         </Grid>
